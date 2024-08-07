@@ -7,23 +7,26 @@ from typing import List, TypeVar
 class Auth():
     """ authentication class """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        ''' require authentication '''
-        if not path or not excluded_paths:
-            return True
-        if not path.endswith('/'):
-            path += '/'
-
-        for excluded_path in excluded_paths:
-            if not excluded_path.endswith('/'):
-                excluded_path += '/'
-
-            if excluded_path.endswith('*'):
-                base_excluded_path = excluded_path[:-1]
-                if path.startswith(base_excluded_path):
-                    return False
+        """Return True if the path requires authentication"""
+        if path:
+            if path.endswith('/'):
+                alt_path = path[:-1]
             else:
-                if path == excluded_path:
+                alt_path = path + '/'
+
+            if excluded_paths and excluded_paths != []:
+                if path in excluded_paths or alt_path in excluded_paths:
                     return False
+
+                for ex_path in excluded_paths:
+                    if ex_path.endswith('*'):
+                        base_ex_path = ex_path[:-1]
+                        if (path.startswith(base_ex_path) or
+                                alt_path.startswith(base_ex_path)):
+                            return False
+                    else:
+                        if path == ex_path or alt_path == ex_path:
+                            return False
 
         return True
 
