@@ -9,7 +9,13 @@ class SessionExpAuth(SessionAuth):
     """ session expiration auth class """
     def __init__(self):
         """ initilize """
-        self.session_duration = int(os.getenv('SESSION_DURATION'), 0)
+        SESSION_DURATION = os.getenv('SESSION_DURATION')
+        try:
+            session_duration = int(SESSION_DURATION)
+        except Exception:
+            session_duration = 0
+
+        self.session_duration = session_duration
 
     def create_session(self, user_id=None):
         """ creates a session """
