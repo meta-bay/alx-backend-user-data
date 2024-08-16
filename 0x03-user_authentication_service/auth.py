@@ -91,5 +91,6 @@ class Auth:
             if user:
                 reset_token = _generate_uuid()
                 setattr(user, "reset_token", reset_token)
+                return reset_token
         except NoResultFound:
             raise ValueError
