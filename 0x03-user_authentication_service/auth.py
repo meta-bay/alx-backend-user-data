@@ -42,14 +42,13 @@ class Auth:
         """ credentials validation """
         try:
             user = self._db.find_user_by(email=email)
-            if user:
-                if bcrypt.checkpw(
-                    password.encode('utf-8'), user.hashed_password
-                ):
-                    return True
-                return False
         except NoResultFound:
             return False
+
+        passwd1 = password.encode('utf-8')
+        passwd2 = user.hashed_password
+
+        return bcrypt.checkpw(passwd1, passwd2)
 
     def create_session(self, email: str) -> str:
         """ Get session ID """
