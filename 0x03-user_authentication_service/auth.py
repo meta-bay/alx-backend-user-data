@@ -102,5 +102,6 @@ class Auth:
             hashed_passwd = _hash_password(password)
             user.hashed_password = hashed_passwd
             user.reset_token = None
+            self._db._session.commit()
         except NoResultFound:
             raise ValueError
