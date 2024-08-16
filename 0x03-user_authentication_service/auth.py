@@ -82,11 +82,4 @@ class Auth:
         """ Destroy session """
         if user_id is None:
             return None
-        try:
-            user = self._db.find_user_by(user_id=user_id)
-            if user:
-                setattr(user, user.session_id, None)
-                self._db._session.commit()
-            return None
-        except NoResultFound:
-            return None
+        self._db.update_user(user_id, None)
